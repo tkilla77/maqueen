@@ -25,9 +25,9 @@ class Wheel:
         if (speed < 0):
             direction = 1
             speed *= -1
-        self.i2cBuf[1] = direction
-        self.i2cBuf[2] = speed
-        i2c.write(Wheel._i2cAddress, self.i2cBuf)
+        self.buf[1] = direction
+        self.buf[2] = speed
+        i2c.write(Wheel._i2cAddress, self.buf)
     
     def stop(self):
         self.set_speed(0)
