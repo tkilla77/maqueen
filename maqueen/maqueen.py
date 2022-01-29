@@ -136,7 +136,7 @@ class UltrasonicSensor:
 
     def distance(attempts = 1):
         """Returns the ultrasonic distance in front of the maqueen in cm.
-           Returns -1 if the distance cannot be reliably measured."""
+           Returns 1000 if the distance cannot be reliably measured."""
         distance = 1000
         # Avoid returning bogus distance - should be less than 8m.
         while distance > 800 and attempts > 0:
@@ -148,7 +148,7 @@ class UltrasonicSensor:
             distance = echoPulse * 0.017 # Rechne Zeit in Distanz um.
             sleep(5)   # warte (verhindern, dass ein zu häufiges Aufrufen
                     # in kurzer Zeit zu Fehlern führt)
-        return distance if distance > 800 else -1
+        return distance if distance < 800 else 1000
 
 class Frontlights:
     def set_lights(left=0,right=0):
