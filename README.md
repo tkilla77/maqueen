@@ -142,3 +142,4 @@ while True:
         # Show distance in decimeters
         display.show(dist)
     sleep(100)
+```
