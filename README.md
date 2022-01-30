@@ -1,6 +1,13 @@
+Dieses Repository stellt Python Code bereit, um den [Maqueen Roboter](https://www.dfrobot.com/product-1783.html) zusammen mit den [BBC:Microbit](https://microbit.org/) zu steuern.
+
+## Einbindung
+Der Code kann als Python-Quellcode eingebunden werden (`maqueen.py`). Wenn du den online Python-Editor auf https://python.microbit.org/ verwendest, kannst einfach das `maqueen.hex` des neuesten [Release](https://github.com/tkilla77/maqueen/releases) in den Editor ziehen.
+
+## API
+
 ### Motorsteuerung
 
-Du folgenden Funktionen steuern die Motoren des Maqueen:
+Die folgenden Funktionen steuern die Motoren des Maqueen:
 ```python
 from microbit import *
 from maqueen import *
@@ -79,7 +86,7 @@ while True:
 
 ### Bottom LEDS
 
-Du kannst die Farb-LEDs auf der Unterseite des Maqueens wie folgt kontrollieren. Die LEDs können im [[https://www.farb-tabelle.de/de/farbtabelle.htm|RGB-Farbraum]] (rot-grün-blau) programmiert werden. Jede Farbe kann Werte von 0 (aus) bis 255 annehmen.
+Du kannst die Farb-LEDs auf der Unterseite des Maqueens wie folgt kontrollieren. Die LEDs können im [RGB-Farbraum](https://www.farb-tabelle.de/de/farbtabelle.htm) (rot-grün-blau) programmiert werden. Jede Farbe kann Werte von 0 (aus) bis 255 annehmen.
 
 ```python
 from maqueen import *
@@ -125,7 +132,7 @@ else:
 ```
 
 ### Distanzmesser
-Der Ultraschallsensor gibt die ungefähre Distanz bis zum nächsten Objekt wieder. Lies [[gf_informatik:microbit_programmieren_maqueen#ultraschall-sensor_auslesen|hier mehr dazu]]. Wenn du die `distance()` Funktion einbaust, kannst du vermeiden, dass der Roboter in Gegenstände fährt...
+Der Ultraschallsensor gibt die ungefähre Distanz bis zum nächsten Objekt wieder. Wenn du die `distance()` Funktion einbaust, kannst du vermeiden, dass der Roboter in Gegenstände fährt...
 
 ```python
 from maqueen import *
