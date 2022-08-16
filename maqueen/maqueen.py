@@ -5,13 +5,14 @@ import neopixel
 
 class Wheel:
     """A single wheel on the maqueen chassis."""
-    _i2cAddress = 0x10
+    _i2c_address = 0x10
     _connected = False
 
+    @staticmethod
     def _connect():
         if Wheel._connected:
             return
-        while _i2cAddress not in i2c.scan():
+        while Wheel._i2c_address not in i2c.scan():
             sleep(50)
         Wheel._connected = True
         print("Motor connection established")
@@ -28,7 +29,7 @@ class Wheel:
             speed *= -1
         self.buf[1] = direction
         self.buf[2] = speed
-        i2c.write(Wheel._i2cAddress, self.buf)
+        i2c.write(Wheel._i2c_address, self.buf)
     
     def stop(self):
         self.set_speed(0)
@@ -38,13 +39,13 @@ class Chassis:
     _wheelbase = 8  # Radstand: 8cm
 
     def __init__(self, left_wheel=Wheel(0x00), right_wheel=Wheel(0x02)):
-        self.left = left_wheel
-        self.right = right_wheel
+        self.left_wheel = left_wheel
+        self.right_wheel = right_wheel
     
     def forward(self, speed=50):
         """Sets both wheels in forward motion (backwards if speed is negative)."""
-        self.left.set_speed(speed)
-        self.right.set_speed(speed)
+        self.left_wheel.set_speed(speed)
+        self.right_wheel.set_speed(speed)
 
     def backward(self, speed=50):
         """Sets both wheels in backward motion (forward if speed is negative)."""
@@ -54,26 +55,26 @@ class Chassis:
         """Sets both wheels in motion. The speed is the speed of the outer 
            (right) wheel, the radius describes the inner circle of the left
            wheel. A radius of zero means the left wheel will stop."""
-        self.left.set_speed(radius_cm*speed/(radius_cm + Chassis._wheelbase))
-        self.right.set_speed(speed)
+        self.left_wheel.set_speed(radius_cm*speed/(radius_cm + Chassis._wheelbase))
+        self.right_wheel.set_speed(speed)
 
     def right(self, speed=50, radius_cm=0):
         """Sets both wheels in motion. The speed is the speed of the outer 
            (left) wheel, the radius describes the inner circle of the right
            wheel. A radius of zero means the right wheel will stop."""
-        self.right.set_speed(radius_cm*speed/(radius_cm + Chassis._wheelbase))
-        self.left.set_speed(speed)
+        self.right_wheel.set_speed(radius_cm*speed/(radius_cm + Chassis._wheelbase))
+        self.left_wheel.set_speed(speed)
     
     def rotate(self, speed):
         """Lets the chassis rotate clockwise on place with given speed, counter
            clockwise if speed is negative."""
-        self.left.set_speed(speed)
-        self.right.set_speed(-1*speed)
+        self.left_wheel.set_speed(speed)
+        self.right_wheel.set_speed(-1*speed)
 
     def stop(self):
         """Stops both wheels."""
-        self.left.stop()
-        self.right.stop()
+        self.left_wheel.stop()
+        self.right_wheel.stop()
 
 class Driver:
     """High-level driving interface for the maqueen chassis. The 
@@ -134,7 +135,7 @@ class UltrasonicSensor:
         self.send_pin = send_pin
         self.echo_pin = echo_pin
 
-    def distance(attempts = 1):
+    def distance(self, attempts = 1):
         """Returns the ultrasonic distance in front of the maqueen in cm.
            Returns 1000 if the distance cannot be reliably measured."""
         distance = 1000
@@ -151,6 +152,7 @@ class UltrasonicSensor:
         return distance if distance < 800 else 1000
 
 class Frontlights:
+    @staticmethod
     def set_lights(left=0,right=0):
         """Control left and right LEDs of maqueen. 0=off, 1=on."""
         pin8.write_digital(left)
