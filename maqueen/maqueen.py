@@ -9,11 +9,13 @@ class Wheel:
     _connected = False
 
     @staticmethod
-    def _connect():
-        if Wheel._connected:
-            return
+    def _connect(timeout_secs=1):
+        tries = timeout_secs * 20
         while Wheel._i2c_address not in i2c.scan():
+            if tries <= 0:
+                raise RuntimeError("waiting for motor failed")
             sleep(50)
+            tries -= 1
         Wheel._connected = True
         print("Motor connection established")
 
@@ -22,7 +24,8 @@ class Wheel:
 
     def set_speed(self, speed):
         """Sets the speed of the wheel in the range [-255,255]."""
-        Wheel._connect()
+        if not Wheel._connected:
+            Wheel._connect()
         direction = 0
         if (speed < 0):
             direction = 1
@@ -38,9 +41,9 @@ class Chassis:
     """The maqueen chassis consisting of two wheels."""
     _wheelbase = 8  # Radstand: 8cm
 
-    def __init__(self, left_wheel=Wheel(0x00), right_wheel=Wheel(0x02)):
-        self.left_wheel = left_wheel
-        self.right_wheel = right_wheel
+    def __init__(self):
+        self.left_wheel = Wheel(0x00)
+        self.right_wheel = Wheel(0x02)
     
     def forward(self, speed=50):
         """Sets both wheels in forward motion (backwards if speed is negative)."""
@@ -80,7 +83,7 @@ class Driver:
     """High-level driving interface for the maqueen chassis. The 
        methods are blocking, i.e. the control flow only returns once
        the given distance / curve are completed."""
-    def __init__(self, chassis=Chassis()):
+    def __init__(self, chassis):
         self.chassis = chassis
         
     def stop(self):
