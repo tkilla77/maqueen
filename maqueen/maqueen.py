@@ -101,7 +101,11 @@ class Driver:
     def left(self, degrees, radius_cm=0, speed=50):
         """Makes a left turn with the given radius (measured from the inner wheel)
            and angle. Negative angle results in a right turn."""
-        self.right(-1*degrees, radius_cm, speed)
+        self.chassis.left(speed, radius_cm)
+        # 500 was determined experimentally....
+        time = (1 + radius_cm / Chassis._wheelbase) * degrees * 500 / speed
+        sleep(time)
+        self.stop()
 
     def right(self, degrees, radius_cm=0, speed=50):
         """Makes a right turn with the given radius (measured from the inner wheel)
