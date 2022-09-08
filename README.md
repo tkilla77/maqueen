@@ -57,11 +57,11 @@ from maqueen import *
 
 robot = Maqueen()
 chassis = robot.chassis
-left = chassis.left
-right = chassis.right
+left_wheel = chassis.left_wheel
+right_wheel = chassis.right_wheel
 
-left.set_speed(50)
-right.set_speed(-50)
+left_wheel.set_speed(50)
+right_wheel.set_speed(-50)
 sleep(1000)
 chassis.stop()
 ```
