@@ -144,19 +144,24 @@ class UltrasonicSensor:
 
     def distance(self, attempts = 1):
         """Returns the ultrasonic distance in front of the maqueen in cm.
-           Returns 1000 if the distance cannot be reliably measured."""
-        distance = 1000
-        # Avoid returning bogus distance - should be less than 8m.
-        while distance > 800 and attempts > 0:
+           Returns -1 if the distance cannot be reliably measured."""
+        # Avoid returning bogus distance - should be less than 5m.
+        while True:
+            self.send_pin.write_digital(1)
+            utime.sleep_us(10)
+            self.send_pin.write_digital(0)
+            echoPulse = machine.time_pulse_us(self.echo_pin, 1)
+            if echoPulse >= 0 and echoPulse < 30000:  # Negatives Resultat signalisiert Timeout
+                distance = echoPulse * 0.017 # Rechne Zeit in Distanz um.
+                return distance
+
+            # Retry
             attempts -= 1
-            self.send_pin.write_digital(1)   # Pin 1 (Trigger) HIGH für...
-            utime.sleep_us(10)      # ...10 µs...
-            self.send_pin.write_digital(0)   # ...und wieder LOW.
-            echoPulse = machine.time_pulse_us(self.echo_pin, 1) # Messe, wie lange der Echo-Impuls an Pin 2 dauert.
-            distance = echoPulse * 0.017 # Rechne Zeit in Distanz um.
-            sleep(5)   # warte (verhindern, dass ein zu häufiges Aufrufen
-                    # in kurzer Zeit zu Fehlern führt)
-        return distance if distance < 800 else 1000
+            if attempts > 0:
+                sleep(100)  # Avoid interference
+                continue
+            else:
+                return -1
 
 class Frontlights:
     @staticmethod
