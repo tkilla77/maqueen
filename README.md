@@ -132,7 +132,7 @@ else:
 ```
 
 ### Distanzmesser
-Der Ultraschallsensor gibt die ungefähre Distanz bis zum nächsten Objekt wieder. Wenn du die `distance()` Funktion einbaust, kannst du vermeiden, dass der Roboter in Gegenstände fährt...
+Der Ultraschallsensor gibt die ungefähre Distanz bis zum nächsten Objekt wieder. Wenn du die `distance()` Funktion einbaust, kannst du vermeiden, dass der Roboter in Gegenstände fährt.
 
 ```python
 from maqueen import *
