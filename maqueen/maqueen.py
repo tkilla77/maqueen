@@ -158,7 +158,7 @@ class UltrasonicSensor:
             # Retry
             attempts -= 1
             if attempts > 0:
-                sleep(100)  # Avoid interference
+                sleep(10)  # Avoid interference
                 continue
             else:
                 return -1
