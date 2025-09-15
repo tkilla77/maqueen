@@ -93,7 +93,11 @@ class Driver:
     def drive(self, centimeters, speed=50):
         """Drives forward for approximately the given distance in centimeters.
            Negative distance results in backward driving."""
-        self.chassis.forward(speed)
+        if centimeters > 0:
+            self.chassis.forward(speed)
+        else:
+            self.chassis.backward(speed)
+            centimeters *= -1
         delay = 5000 * centimeters / speed
         sleep(delay)
         self.stop()
