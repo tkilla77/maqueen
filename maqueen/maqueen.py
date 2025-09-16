@@ -98,6 +98,8 @@ class Driver:
         else:
             self.chassis.backward(speed)
             centimeters *= -1
+        if speed < 0:
+            centimeters *= -1
         delay = 5000 * centimeters / speed
         sleep(delay)
         self.stop()
@@ -105,8 +107,17 @@ class Driver:
     def left(self, degrees, radius_cm=0, speed=50):
         """Makes a left turn with the given radius (measured from the inner wheel)
            and angle. Negative angle results in a right turn."""
-        self.chassis.left(speed, radius_cm)
+        if degrees < 0:
+            turn = self.chassis.right
+            degrees *= -1
+        else:
+            turn = self.chassis.left
+        turn(speed, radius_cm)
+
+        # Compute delay
         # 500 was determined experimentally....
+        if speed < 0:
+            speed *= -1
         time = (1 + radius_cm / Chassis._wheelbase) * degrees * 500 / speed
         sleep(time)
         self.stop()
@@ -114,10 +125,7 @@ class Driver:
     def right(self, degrees, radius_cm=0, speed=50):
         """Makes a right turn with the given radius (measured from the inner wheel)
            and angle. Negative angle results in a left turn."""
-        self.chassis.right(speed, radius_cm)
-        # 500 was determined experimentally....
-        time = (1 + radius_cm / Chassis._wheelbase) * degrees * 500 / speed
-        sleep(time)
+        self.left(-degrees, radius_cm, speed)
         self.stop()
     
 class FloorSensor:
