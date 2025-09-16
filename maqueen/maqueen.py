@@ -96,7 +96,7 @@ class Driver:
         if centimeters >= 0:
             self.chassis.forward(speed)
         else:
-            self.chassis.bacckward(speed)
+            self.chassis.backward(speed)
             centimeters *= -1
         delay = 5000 * centimeters / speed
         sleep(delay)
